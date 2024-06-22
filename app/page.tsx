@@ -11,7 +11,7 @@ export default async function Home() {
     latitude: 48.85438887421063,
   }
 
-  const coffeeStores = await fetchCoffeePlaces(parisCoordinates);
+  const coffeeStores = await fetchCoffeePlaces(parisCoordinates, 1, 6);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">

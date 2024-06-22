@@ -23,47 +23,48 @@ export default function NearbyCoffeStores() {
   };
 
   useEffect(() => {
-    const generateShops  = async () => {
-        try {
-            if (longLat) {
-                const res = await fetchCoffeePlaces(longLat, 2);
-                setCoffeStores(res);
-                console.log(res);
-            } else {
-                throw new Error('Coordinates are not provided.');
-            }
-        } catch (err) {
-            if (err instanceof Error) {
-                console.log(err.message);
-            }
+    const generateShops = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/coffee-stores?long=${
+            longLat?.longitude
+          }&lat=${longLat?.latitude}&page=${2}&limit=${12}`
+        );
+        setCoffeStores(await res.json());
+        console.log(await res.json());
+      } catch (err) {
+        if (err instanceof Error) {
+          console.log(err.message);
         }
+      }
     };
     generateShops();
-  }, [longLat])
+  }, [longLat]);
 
   return (
-    <div>
+    <>
       <Banner
         onClickHandler={onClickHandler}
         buttonContent={buttonContent}
       />
-      {longLat && `Location: ${longLat.longitude}, ${longLat.latitude}`}
-      {locationErrorMessage && <p>Error: {locationErrorMessage}</p>}
-      <div>
-        <h2 className="my-8 text-4xl font-bold text-white">
-          Coffee Shops Near Me
-        </h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-2 lg:grid-cols-3 lg:gap-6">
-          {coffeStores.map((store: CoffePlace) => (
-            <Card
-              key={store.mapbox_id}
-              name={store.name}
-              link={`/coffee-store/${store.mapbox_id}`}
-              imageUrl={store.imageUrl}
-            />
-          ))}
+      {/* {locationErrorMessage && <p>Error: {locationErrorMessage}</p>} */}
+      {coffeStores.length > 0 && (
+        <div>
+          <h2 className="my-8 text-4xl font-bold text-white">
+            Coffee Shops Near Me
+          </h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-2 lg:grid-cols-3 lg:gap-6">
+            {coffeStores.map((store: CoffePlace) => (
+              <Card
+                key={store.mapbox_id}
+                name={store.name}
+                link={`/coffee-store/${store.mapbox_id}`}
+                imageUrl={store.imageUrl}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }

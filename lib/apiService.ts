@@ -29,10 +29,10 @@ let mapboxIdToImageUrl: {
   imageUrl: string;
 }[] = [];
 
-export const fetchCoffeePlaces = async (coordinates: {longitude: number, latitude: number}, page: number = 0) => {
+export const fetchCoffeePlaces = async (coordinates: {longitude: number, latitude: number}, page: number = 0, limit: number) => {
   try {
     const res = await fetch(
-      `https://api.mapbox.com/search/geocode/v6/forward?q=caf%C3%A9&limit=6&proximity=${coordinates.longitude}%2C${coordinates.latitude}&worldview=tr&access_token=${process.env.NEXT_PUBLIC_MAPBOX_KEY}`
+      `https://api.mapbox.com/search/geocode/v6/forward?q=caf%C3%A9&limit=${limit}&proximity=${coordinates.longitude}%2C${coordinates.latitude}&worldview=tr&access_token=${process.env.MAPBOX_KEY}`
     );
 
     const data = await res.json();
@@ -69,7 +69,7 @@ export const fetchCoffeePlaces = async (coordinates: {longitude: number, latitud
 export const fetchCoffeePlace = async (id: string) => {
   try {
     const res = await fetch(
-      `https://api.mapbox.com/search/geocode/v6/forward?q=${id}&proximity=ip&access_token=${process.env.NEXT_PUBLIC_MAPBOX_KEY}`
+      `https://api.mapbox.com/search/geocode/v6/forward?q=${id}&proximity=ip&access_token=${process.env.MAPBOX_KEY}`
     );
     if (!mapboxIdToImageUrl) {
       throw new Error();
