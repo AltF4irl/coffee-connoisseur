@@ -25,8 +25,9 @@ export default function Card({ name, imageUrl, link }: CardProps) {
           <Image
             className="rounded-lg shadow-lg"
             src={imageUrl}
-            layout="fill"
-            objectFit="cover"
+            fill
+            sizes='100%'
+            style={{objectFit:"cover"}}
             alt={`${name} Coffee Store Image`}
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8/+ZNPQAIoQM4xp5zkgAAAABJRU5ErkJggg=="
             placeholder="blur"

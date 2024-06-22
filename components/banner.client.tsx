@@ -2,8 +2,8 @@
 import React from 'react';
 import Image from 'next/image';
 
-export default function Banner() {
-  const onClickHandler = () => {};
+export default function Banner({onClickHandler}: {onClickHandler: () => void}) {
+  // const onClickHandler = () => {};
   return (
     <div className='mb-12 grid lg:mb-24 lg:grid-cols-2'>
       <div className='z-20 flex flex-col px-2 md:pt-12'>
