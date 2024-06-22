@@ -1,12 +1,12 @@
 import { CoffePlace } from '@/types/types';
 import { unsplash } from './unsplash.config';
 
-const fetchImageUrls = async () => {
+export const fetchImageUrls = async (nbr: number, page: number = 1) => {
   try {
     const coffeeImages = await unsplash.search.getPhotos({
       query: 'coffee',
-      page: 1,
-      perPage: 6,
+      page: page,
+      perPage: nbr,
       orientation: 'portrait',
     });
 
@@ -29,14 +29,14 @@ let mapboxIdToImageUrl: {
   imageUrl: string;
 }[] = [];
 
-export const fetchCoffeePlaces = async () => {
+export const fetchCoffeePlaces = async (coordinates: {longitude: number, latitude: number}, page: number = 0) => {
   try {
     const res = await fetch(
-      `https://api.mapbox.com/search/geocode/v6/forward?q=caf%C3%A9&country=fr&limit=6&proximity=2.350083309599455%2C48.85438887421063&worldview=tr&access_token=${process.env.MAPBOX_KEY}`
+      `https://api.mapbox.com/search/geocode/v6/forward?q=caf%C3%A9&limit=6&proximity=${coordinates.longitude}%2C${coordinates.latitude}&worldview=tr&access_token=${process.env.NEXT_PUBLIC_MAPBOX_KEY}`
     );
 
     const data = await res.json();
-    const imageUrls = await fetchImageUrls();
+    const imageUrls = await fetchImageUrls(data.length, page);
 
     if (!imageUrls) {
       throw new Error('no images available');
@@ -69,7 +69,7 @@ export const fetchCoffeePlaces = async () => {
 export const fetchCoffeePlace = async (id: string) => {
   try {
     const res = await fetch(
-      `https://api.mapbox.com/search/geocode/v6/forward?q=${id}&proximity=ip&access_token=${process.env.MAPBOX_KEY}`
+      `https://api.mapbox.com/search/geocode/v6/forward?q=${id}&proximity=ip&access_token=${process.env.NEXT_PUBLIC_MAPBOX_KEY}`
     );
     if (!mapboxIdToImageUrl) {
       throw new Error();

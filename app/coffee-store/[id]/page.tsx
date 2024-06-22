@@ -41,7 +41,7 @@ export default async function Page(props: {
                 height="24"
                 alt="places icon"
               />
-              <p className="pl-2">{full_address.split(',')[1].trim()}</p>
+              <p className="pl-2">{full_address}</p>
             </div>
           )}
         </div>
