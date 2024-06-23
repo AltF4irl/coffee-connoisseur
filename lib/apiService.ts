@@ -24,6 +24,11 @@ export const fetchImageUrls = async (nbr: number, page: number = 1) => {
   }
 };
 
+let mapboxIdToImageUrl: {
+  mapbox_id: string;
+  imageUrl: string;
+}[] = [];
+
 export const fetchCoffeePlaces = async (coordinates: {longitude: number, latitude: number}, page: number = 0, limit: number) => {
   try {
     const res = await fetch(
@@ -37,8 +42,15 @@ export const fetchCoffeePlaces = async (coordinates: {longitude: number, latitud
       throw new Error('no images available');
     }
 
+    mapboxIdToImageUrl = [];
+
     return data.features.map(
       (feature: { properties: CoffePlace }, index: number) => {
+        mapboxIdToImageUrl.push({
+          mapbox_id: feature.properties.mapbox_id,
+          imageUrl: imageUrls[index],
+        });
+
         return {
           mapbox_id: feature.properties.mapbox_id,
           name: feature.properties.name,
@@ -59,6 +71,12 @@ export const fetchCoffeePlace = async (id: string) => {
     const res = await fetch(
       `https://api.mapbox.com/search/geocode/v6/forward?q=${id}&proximity=ip&access_token=${process.env.MAPBOX_KEY}`
     );
+    if (!mapboxIdToImageUrl) {
+      throw new Error();
+    }
+    const imageUrl = mapboxIdToImageUrl.find(
+      (object) => object.mapbox_id === id
+    )?.imageUrl;
 
     const data = await res.json();
 
@@ -71,6 +89,7 @@ export const fetchCoffeePlace = async (id: string) => {
           mapbox_id: feature.properties.mapbox_id,
           name: feature.properties.name,
           full_address: feature.properties.full_address,
+          imageUrl: imageUrl,
         };
       }
     )[0];
