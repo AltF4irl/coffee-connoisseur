@@ -45,7 +45,7 @@ export default function Upvote({ votes, id }: { votes: number; id: string }) {
       </div>
 
       <form action={upvoteWithId}>
-      <SubmitButton />
+        <SubmitButton />
       </form>
     </>
   );

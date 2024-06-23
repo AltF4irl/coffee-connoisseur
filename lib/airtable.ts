@@ -24,8 +24,6 @@ const findRecordByFilter = async (id: string) => {
     };
   });
 
-  console.log(allRecords);
-
   return allRecords;
 };
 
@@ -68,20 +66,20 @@ export const updateCoffeeStore = async (id: string) => {
 
   if (store.length > 0) {
     try {
-        await table.update([
-            {
-              id: store[0].recordId,
-              fields: {
-                votes: (store[0].votes as number) + 1,
-              },
-            },
-          ]);
+      await table.update([
+        {
+          id: store[0].recordId,
+          fields: {
+            votes: (store[0].votes as number) + 1,
+          },
+        },
+      ]);
     } catch (err) {
-        if (err instanceof Error) {
-            console.error(err.message);
-        }
+      if (err instanceof Error) {
+        console.error(err.message);
+      }
     }
   } else {
-    console.error('Record Id Doesn\'t Match');
+    console.error("Record Id Doesn't Match");
   }
 };

@@ -25,8 +25,6 @@ export default async function Page(props: {
     imageUrl: createdCoffeeStore?.imageUrl as string,
   };
 
-  console.log(formatedStoreWithVote.imageUrl);
-
   return (
     <div className="h-full min-h-screen pb-80">
       <div className="m-auto grid max-w-full px-12 py-12 lg:max-w-6xl lg:grid-cols-2 lg:gap-4">
