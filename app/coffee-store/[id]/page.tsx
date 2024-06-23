@@ -1,4 +1,6 @@
+import { createCoffeeStore } from '@/lib/airtable';
 import { fetchCoffeePlace } from '@/lib/apiService';
+import Upvote from '@/lib/upvote.client';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -10,6 +12,14 @@ export default async function Page(props: {
   const { mapbox_id, name, full_address, imageUrl } = await fetchCoffeePlace(
     props.params.id
   );
+  const formatedStore = {
+    id: props.params.id,
+    name,
+    address: full_address,
+    imageUrl
+  }
+  const createdCoffeeStore = await createCoffeeStore(formatedStore);
+
   return (
     <div className="h-full min-h-screen pb-80">
       <div className="m-auto grid max-w-full px-12 py-12 lg:max-w-6xl lg:grid-cols-2 lg:gap-4">
@@ -44,6 +54,8 @@ export default async function Page(props: {
               <p className="pl-2">{full_address}</p>
             </div>
           )}
+
+          <Upvote />
         </div>
       </div>
     </div>

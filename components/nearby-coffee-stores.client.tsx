@@ -25,13 +25,15 @@ export default function NearbyCoffeStores() {
   useEffect(() => {
     const generateShops = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:3000/api/coffee-stores?long=${
-            longLat?.longitude
-          }&lat=${longLat?.latitude}&page=${2}&limit=${12}`
-        );
-        setCoffeStores(await res.json());
-        console.log(await res.json());
+        if( longLat?.latitude && longLat?.longitude) {
+          const res = await fetch(
+            `http://localhost:3000/api/coffee-stores?long=${
+              longLat?.longitude
+            }&lat=${longLat?.latitude}&page=${2}&limit=${12}`
+          );
+          setCoffeStores(await res.json());
+          console.log(await res.json());
+        }
       } catch (err) {
         if (err instanceof Error) {
           console.log(err.message);
