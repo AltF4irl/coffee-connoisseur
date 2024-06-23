@@ -16,13 +16,16 @@ export default async function Page(props: {
     id: props.params.id,
     name,
     address: full_address,
-    imageUrl
-  }
+    imageUrl,
+  };
   const createdCoffeeStore = await createCoffeeStore(formatedStore);
   const formatedStoreWithVote = {
     ...formatedStore,
-    votes: createdCoffeeStore?.votes as number || 0,
-  }
+    votes: (createdCoffeeStore?.votes as number) || 0,
+    imageUrl: createdCoffeeStore?.imageUrl as string,
+  };
+
+  console.log(formatedStoreWithVote.imageUrl);
 
   return (
     <div className="h-full min-h-screen pb-80">
@@ -36,7 +39,7 @@ export default async function Page(props: {
           </div>
           <Image
             src={
-              imageUrl ||
+              formatedStoreWithVote.imageUrl ||
               'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'
             }
             width={740}
@@ -59,7 +62,10 @@ export default async function Page(props: {
             </div>
           )}
 
-          <Upvote votes={formatedStoreWithVote.votes} id={props.params.id} />
+          <Upvote
+            votes={formatedStoreWithVote.votes}
+            id={props.params.id}
+          />
         </div>
       </div>
     </div>

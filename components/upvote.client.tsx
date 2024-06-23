@@ -3,12 +3,34 @@
 import { upvote } from '@/actions';
 import Image from 'next/image';
 import React from 'react';
+import { useFormStatus } from 'react-dom';
 
-export default function Upvote({ votes, id }: { votes: number, id: string }) {
-  const handleOnClick = () => {
-    console.log('clicked');
-  };
+export function SubmitButton() {
+  const { pending } = useFormStatus();
 
+  return (
+    <button
+      type="submit"
+      className="bg-purple-951 min-w-[120px]"
+      disabled={pending}
+      aria-disabled={pending}
+    >
+      {pending ? (
+        <Image
+          src="/static/icons/loading-spinner.svg"
+          width="30"
+          height="30"
+          alt="Loading"
+          className="m-auto"
+        />
+      ) : (
+        'Up vote!'
+      )}
+    </button>
+  );
+}
+
+export default function Upvote({ votes, id }: { votes: number; id: string }) {
   const upvoteWithId = upvote.bind(null, id);
   return (
     <>
@@ -23,7 +45,7 @@ export default function Upvote({ votes, id }: { votes: number, id: string }) {
       </div>
 
       <form action={upvoteWithId}>
-        <button>Up vote!</button>
+      <SubmitButton />
       </form>
     </>
   );
