@@ -1,6 +1,6 @@
 import { createCoffeeStore } from '@/lib/airtable';
 import { fetchCoffeePlace } from '@/lib/apiService';
-import Upvote from '@/lib/upvote.client';
+import Upvote from '@/components/upvote.client';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -9,7 +9,7 @@ export default async function Page(props: {
   params: { id: string };
   searchParams: { id: string };
 }) {
-  const { mapbox_id, name, full_address, imageUrl } = await fetchCoffeePlace(
+  const { name, full_address, imageUrl } = await fetchCoffeePlace(
     props.params.id
   );
   const formatedStore = {
@@ -19,6 +19,10 @@ export default async function Page(props: {
     imageUrl
   }
   const createdCoffeeStore = await createCoffeeStore(formatedStore);
+  const formatedStoreWithVote = {
+    ...formatedStore,
+    votes: createdCoffeeStore?.votes as number || 0,
+  }
 
   return (
     <div className="h-full min-h-screen pb-80">
@@ -55,7 +59,7 @@ export default async function Page(props: {
             </div>
           )}
 
-          <Upvote />
+          <Upvote votes={formatedStoreWithVote.votes} id={props.params.id} />
         </div>
       </div>
     </div>

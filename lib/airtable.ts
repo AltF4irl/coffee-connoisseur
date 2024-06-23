@@ -15,7 +15,11 @@ const findRecordByFilter = async (id: string) => {
 
   const allRecords = findRecords.map((record) => {
     return {
-      ...record.fields,
+      name: record.fields.name,
+      id: record.fields.id,
+      imageUrl: record.fields.imageUrl,
+      address: record.fields.address,
+      votes: record.fields.votes,
       recordId: record.id,
     };
   });
@@ -41,7 +45,11 @@ export const createCoffeeStore = async (object: CoffePlacev2) => {
 
       return stores.map((store) => {
         return {
-          ...store.fields,
+          name: store.fields.name,
+          id: store.fields.id,
+          imageUrl: store.fields.imageUrl,
+          address: store.fields.address,
+          votes: store.fields.votes,
           recordId: store.id,
         };
       })[0];
@@ -52,5 +60,28 @@ export const createCoffeeStore = async (object: CoffePlacev2) => {
     if (err instanceof Error) {
       console.error('something went wrong');
     }
+  }
+};
+
+export const updateCoffeeStore = async (id: string) => {
+  const store = await findRecordByFilter(id);
+
+  if (store.length > 0) {
+    try {
+        await table.update([
+            {
+              id: store[0].recordId,
+              fields: {
+                votes: (store[0].votes as number) + 1,
+              },
+            },
+          ]);
+    } catch (err) {
+        if (err instanceof Error) {
+            console.error(err.message);
+        }
+    }
+  } else {
+    console.error('Record Id Doesn\'t Match');
   }
 };
